@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var mapdata=[
+                    {name: 'United States', value: 4822023},
+                    {name: 'China', value: 731449},
+                    {name: 'Japan', value: 6553255},
+                ];
+option = null;
+option = {
+ 
+        backgroundColor: 'white',
+        title : {
+                x: 'center',
+                align: 'right'
+            },
+        tooltip: {
+            trigger: 'item',
+            showDelay: 0,
+            transitionDuration: 0.2,
+            formatter: function (params) {
+                 if (params.data){
+                   var value = (params.value + '').split('.');
+                   value = value[0].replace(/(\d{1,3})(?=(?:\d{3})+(?!\d))/g, '$1,');  
+                   return params.seriesName + '<br/>' + params.name + ': ' + value; 
+                }
+                else
+                    return "No Data";
+                
+            }
+        },
+        visualMap: {
+            left: 'right',
+            min: 0,
+            max: 500000000,
+            inRange: {
+                color: ['#313695', '#4575b4', '#74add1', '#abd9e9', '#e0f3f8', '#ffffbf', '#fee090', '#fdae61', '#f46d43', '#d73027', '#a50026']
+            },
+            text:['High','Low'],           // 文本，默认为数值文本
+            calculable: true
+        },
+        toolbox: {
+            show: true,
+            //orient: 'vertical',
+            left: 'left',
+            top: 'top',
+            feature: {
+                dataView: {readOnly: false},
+                restore: {},
+                saveAsImage: {}
+            }
+        },
+        series: [
+            {
+                name: 'The Number of Patents',
+                type: 'map',
+                roam: true,
+                map: 'world',
+                itemStyle:{
+                        areaColor: '#B0C4DE',
+                        borderColor: '#B0C4DE'
+                },
+                emphasis:{                   
+                    label:{show:true,fontSize:16},
+                    itemStyle:{areaColor: '#ffee51',
+                    borderColor: '#ffee51'}
+                },
+                // 文本位置修正
+                textFixed: {
+                    
+                },
+                data:mapdata
+         }   
+        ],
+
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>
