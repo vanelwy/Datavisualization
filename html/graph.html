@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var ipcdata=[["A01B",1,"A"],["A01D",17,"A"],["A01G",4,"A"],["A45D",1,"A"],["A45F",3,"A"],["A47J",25,"A"],["A47L",11,"A"],["A61B",1,"A"],["A61C",1,"A"],["A61K",1,"A"],["B01D",11,"B"],["B02C",1,"B"],["B03C",1,"B"],["B05B",4,"B"],["B05C",3,"B"],["B07C",2,"B"],["B08B",1,"B"],["B21D",9,"B"],["B22D",1,"B"],["B23B",1,"B"],["B23D",1,"B"],["B23K",5,"B"],["B23P",10,"B"],["B23Q",5,"B"],["B24B",1,"B"],["B25B",3,"B"],["B25F",8,"B"],["B25G",1,"B"],["B25H",1,"B"],["B25J",5,"B"],["B26D",1,"B"],["B27B",2,"B"],["B28D",3,"B"],["B29C",6,"B"],["B29L",1,"B"],["B30B",1,"B"],["B31D",1,"B"],["B41C",1,"B"],["B41J",1,"B"],["B60C",1,"B"],["B60D",1,"B"],["B60H",10,"B"],["B60P",2,"B"],["B60S",1,"B"],["B61D",1,"B"],["B62D",1,"B"],["B62J",1,"B"],["B62K",1,"B"],["B63J",1,"B"],["B65B",2,"B"],["B65D",12,"B"],["B65F",3,"B"],["B65G",17,"B"],["B66C",1,"B"],["B66F",1,"B"],["C01B",1,"C"],["C02F",9,"C"],["C07H",2,"C"],["C08B",1,"C"],["C09B",1,"C"],["C11B",1,"C"],["C21B",1,"C"],["D06F",2,"D"],["E01H",9,"E"],["E04H",1,"E"],["E05D",1,"E"],["E21B",1,"E"],["F04B",6,"F"],["F04C",12,"F"],["F04D",28,"F"],["F16B",4,"F"],["F16D",2,"F"],["F16H",5,"F"],["F16K",5,"F"],["F16L",4,"F"],["F16M",2,"F"],["F23N",1,"F"],["F24C",2,"F"],["F24D",5,"F"],["F24F",84,"F"],["F24H",6,"F"],["F25B",35,"F"],["F25D",5,"F"],["F28F",7,"F"],["G01B",5,"G"],["G01D",3,"G"],["G01J",1,"G"],["G01K",1,"G"],["G01L",1,"G"],["G01M",5,"G"],["G01N",12,"G"],["G01R",30,"G"],["G01V",1,"G"],["G02F",1,"G"],["G05B",15,"G"],["G05D",5,"G"],["G05F",1,"G"],["G06F",7,"G"],["G06K",2,"G"],["G06N",1,"G"],["G06Q",2,"G"],["G06T",1,"G"],["G07C",1,"G"],["G07F",1,"G"],["G08C",2,"G"],["G09B",2,"G"],["G09F",1,"G"],["G10K",1,"G"],["G10L",2,"G"],["H01B",1,"H"],["H01F",2,"H"],["H01H",8,"H"],["H01L",4,"H"],["H01M",15,"H"],["H01R",5,"H"],["H02B",1,"H"],["H02G",4,"H"],["H02H",1,"H"],["H02J",6,"H"],["H02K",7,"H"],["H02M",8,"H"],["H02P",6,"H"],["H02S",4,"H"],["H03K",1,"H"],["H04B",1,"H"],["H04L",5,"H"],["H04M",5,"H"],["H04N",3,"H"],["H04R",2,"H"],["H04W",3,"H"],["H05K",8,"H"]];
+var cate=["A","B","C","D","E","F","G","H"];
+var nodes=[];
+var categories=[];
+for (i=0; i<cate.length;i++){
+  categories[i]={
+    name: cate[i],
+  }
+}
+console.log(categories);
+for (i=0; i<ipcdata.length;i++){
+  nodes[i]={
+    name: ipcdata[i][0],
+    value: ipcdata[i][1],
+    category:ipcdata[i][2],
+    symbolSize:(function(){
+      if(ipcdata[i][1]>80){
+        return (ipcdata[i][1]-20)
+      }
+      else if(ipcdata[i][1]<10){
+        return (ipcdata[i][1]*2)
+     }
+     else 
+      return (ipcdata[i][1]+20)
+    })(),
+    label:{
+            normal: {
+                show: ipcdata[i][1]>10
+            }
+        },
+  }
+}
+console.log(nodes);
+option = null;
+    option = {
+        tooltip: {},
+        legend: [{
+            // selectedMode: 'single',
+            data: categories.map(function (a) {
+                return a.name;
+            })
+        }],
+        animationDurationUpdate: 1500,
+        animationEasingUpdate: 'quinticInOut',
+        series : [
+            {
+                name: '专利IPC',
+                type: 'graph',
+                layout: 'circular',
+                circular: {
+                    rotateLabel: true,
+                    },
+                data: nodes,
+                categories: categories,
+                roam: true,
+                label: {
+                    normal: {
+                        position: 'right',
+                        formatter: '{b}'
+                    }
+                },
+                lineStyle: {
+                    normal: {
+                        color: 'source',
+                        curveness: 0.3
+                    }
+                }
+            }
+        ]
+    };
+
+    myChart.setOption(option);
+
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

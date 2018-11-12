@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+option = null;
+
+var years = [2011,2012,2013,2014,2015,2016,2017,2018];//xaxis
+var fields = ["A01D","A47J","B65G","F04D","F24F","F25B","G01N","G01R","G05B","H01M"];//yaxis
+
+var data = [[0,0,1],[1,4,1],[1,3,1],[2,0,1],[2,7,3],[2,1,2],[2,6,1],[2,2,1],[2,4,11],[2,3,2],[3,8,3],[3,5,2],[3,7,6],[3,6,5],[3,4,11],[3,3,1],[3,9,2],[4,0,2],[4,3,5],[4,7,5],[4,4,31],[4,8,1],[4,5,9],[4,6,2],[4,1,6],[5,0,1],[5,2,5],[5,4,9],[5,8,1],[5,3,2],[5,1,6],[5,5,6],[6,3,16],[6,8,8],[6,5,16],[6,0,11],[6,4,109],[6,7,15],[6,6,4],[6,1,10],[6,9,13],[6,2,11],[7,5,2],[7,1,1],[7,4,12],[7,8,2],[7,3,1],[7,7,1],[7,0,1]];//[years(xaxis),fields(yaxis),the patents number)]
+console.log(data);
+
+option = {
+    legend: {
+        data: ['专利数量'],
+        left: '20%',
+        top:'5%',
+    },
+    toolbox: {
+                show : true,
+                feature : {
+                    mark : {show: true},
+                    saveAsImage : {show: true},
+                    restore : {show: true},
+                },
+                right : '15%',
+                top:'5%',
+            },
+    dataZoom: [{
+        show: true,
+        start: 0,
+        end: 100
+        },
+        {
+        type: 'inside',
+        xAxisIndex: 0,
+        start: 50,
+        end: 100
+        },
+        {
+            type: 'inside',
+            yAxisIndex: 0,
+            //filterMode: 'empty',
+            start: 0,
+            end: 100
+        }
+        ],
+    tooltip: {
+        
+        position: 'top',
+        formatter: function (params) {
+            return fields[params.value[1]]+':'+params.value[2] +'(' + years[params.value[0]] +'年)';
+                    }
+        
+    },
+    grid: {
+        left: '10%',
+        bottom: '10%',
+        right: '10%',
+        containLabel: true
+    },
+    xAxis: {
+        type: 'category',
+        data: years,
+        boundaryGap: false,
+        splitLine: {
+            show: true,
+            lineStyle: {
+                color: '#999',
+                type: 'dashed'
+            }
+        },
+        axisLine: {
+            show: false
+        }
+    },
+    yAxis: {
+        type: 'category',
+        data: fields,
+        axisLine: {
+            show: false
+        },
+        splitLine: {
+            show: false,
+            lineStyle: {
+                color: '#999',
+                type: 'dashed'
+            }
+        },
+    },
+    series: [{
+        name: '专利数量',
+        type: 'scatter',
+        symbolSize: function (val) {
+            return val[2] * 2;
+        },
+        data: data,
+        showEffectOn: 'emphasis',
+        animationDelay: function (idx) {
+            return idx * 5;
+        },
+        showEffectOn: 'render',
+        rippleEffect: {
+                brushType: 'stroke'
+        },
+        hoverAnimation: true,
+        itemStyle: {
+                normal: {
+                    color: '#336699',
+                    shadowBlur: 10,
+                    shadowColor: '#336699'
+                }
+            },
+           
+    }],
+};
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>

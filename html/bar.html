@@ -1,0 +1,132 @@
+<!DOCTYPE html>
+<html style="height: 100%">
+   <head>
+       <meta charset="utf-8">
+   </head>
+   <body style="height: 100%; margin: 0">
+       <div id="container" style="height: 100%"></div>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/echarts.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-gl/echarts-gl.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts-stat/ecStat.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/dataTool.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/china.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/map/js/world.js"></script>
+       <script type="text/javascript" src="https://api.map.baidu.com/api?v=2.0&ak=ZUONbpqGBsYGXNIYHicvbAbM"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/echarts/extension/bmap.min.js"></script>
+       <script type="text/javascript" src="http://echarts.baidu.com/gallery/vendors/simplex.js"></script>
+       <script type="text/javascript">
+var dom = document.getElementById("container");
+var myChart = echarts.init(dom);
+var field=["F24F","F25B","G01R","F04D","A47J"];
+var name='格力' ;    
+var name2='美的';
+var data=[[184.0,40.0],[35.0,10.0],[30.0,1.0],[28.0,6.0],[25.0,33.0]];
+var number = [];
+var number2 = [];
+for(var i=0;i<data.length;i++){
+      number.push(parseFloat(data[i][0]));
+      number2.push(parseFloat(-data[i][1]));
+}
+var data1max=Math.max.apply(null, number);//求最大值
+var data2max=Math.min.apply(null, number2);//求最大值
+option = null;
+
+
+option = {
+    tooltip : {
+        trigger: 'axis',
+        axisPointer : {            // 坐标轴指示器，坐标轴触发有效
+            type : 'shadow'        // 默认为直线，可选为：'line' | 'shadow'
+        },
+        formatter: function(params){
+          var reval= params[0].name+"<br/>";
+          reval+=params[0].seriesName+':'+(-params[0].value)+"<br/>";
+          reval+=params[1].seriesName+':'+(params[1].value)+"<br/>";
+        }
+    },
+    legend: {
+        data:[name,name2]
+    },
+    grid: {
+        left: '3%',
+        right: '4%',
+        bottom: '3%',
+        containLabel: true
+    },
+    xAxis : [
+        {
+            type : 'value',
+            min:(function(){
+                        if(data1max>= Math.abs(data2max) )
+                            return -data1max;
+                        else
+                            return data2max;
+                    })(),
+            axisLabel:{
+              formatter:function(value){
+                if (value<0){
+                  return -value;
+                }
+                else return value;
+              }
+            },
+            splitNumber:8,
+        }
+    ],
+    yAxis : [
+        {
+            type : 'category',
+            axisTick : {show: false},
+            data : field,
+            axisLine: {
+            show: false
+            },
+            
+        }
+    ],
+    series : [
+        {
+            name:name,
+            type:'bar',
+            stack: '总量',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'right',
+                    fontSize:16,
+                    color:['#336699'],
+                }
+            },
+            data:number,
+            color:['#336699']
+        },
+        {
+            name:name2,
+            type:'bar',
+            stack: '总量',
+            label: {
+                normal: {
+                    show: true,
+                    position: 'left',
+                    formatter:function(value){
+                        if(value.data<0){
+                            return -value.data;
+                       }
+                    else return value.data;
+                },
+                fontSize:16,
+                color:['#336699'],
+                }
+            },
+            data:number2,
+            color:['#B0E0E6']
+        }
+    ]
+};
+
+if (option && typeof option === "object") {
+    myChart.setOption(option, true);
+}
+       </script>
+   </body>
+</html>
